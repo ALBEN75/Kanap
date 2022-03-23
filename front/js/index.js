@@ -1,3 +1,5 @@
+// API //
+
 fetch("http://127.0.0.1:3000/api/products")
   .then(function(res) {
     if (res.ok) {
