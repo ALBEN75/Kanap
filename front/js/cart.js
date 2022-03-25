@@ -64,5 +64,12 @@ function updateQuantity(articles) {
 
 //On utilise cette fonction pour supprimer un ou des articles dans notre panier.
 function deleteItem(articles) {
-
+    for (let i = 0; i > articles.length; i--) {
+        let deleteBtn = document.querySelector(".deleteItem");
+        deleteBtn.addEventListener("click", function() {
+            
+            
+        });
+    
+    }
 }
