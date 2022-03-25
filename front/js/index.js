@@ -1,5 +1,6 @@
-// API //
+                                  // API //
 
+//On utilise une méthode GET avec la promise fetch et ses fonctions.
 fetch("http://127.0.0.1:3000/api/products")
   .then(function(res) {
     if (res.ok) {
@@ -9,6 +10,7 @@ fetch("http://127.0.0.1:3000/api/products")
   .then(function(value) {
   
   let produits = value;
+  //On utilise une boucle for pour récuperer nos produits et ses informations pour les insérer dans notre page.
   for (let i = 0; i < produits.length; i++){
       console.log(produits.length);
       let section = document.getElementById("items");
