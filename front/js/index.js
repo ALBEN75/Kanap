@@ -1,6 +1,6 @@
                                   // API //
 
-//On utilise une méthode GET avec la promise fetch et ses fonctions.
+//On utilise une méthode fetch avec ses promises (.then, .catch), pour récuperer les informations des produits dans l'API.
 fetch("http://127.0.0.1:3000/api/products")
   .then(function(res) {
     if (res.ok) {

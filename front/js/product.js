@@ -7,7 +7,7 @@ let newUrl = new URL(str);
 //On stocke dans une variable notre nouvelle URL, on utilise l'interface searchParams avec la méthode GET et en paramètre l'id de notre produit.
 let productId = newUrl.searchParams.get('id');
 
-//On utilise une méthode GET avec la promise fetch et ses fonctions.
+//On utilise une méthode fetch avec ses promises (.then, .catch) pour récupérer les informations du produit.
 fetch(`http://127.0.0.1:3000/api/products/${productId}`)
 	.then(function (res) {
 		if (res.ok) {

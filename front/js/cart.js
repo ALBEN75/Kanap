@@ -1,4 +1,4 @@
-                                        //API//
+                                        //DOM//
 
 //On utilise cette variable pour récupérer les données des produits avec notre lockageStorage.                                        
 let itemCommand = JSON.parse(localStorage.getItem("commande"));
@@ -43,17 +43,18 @@ async function addListeners() {
      let articles = document.querySelectorAll(".cart__item");
      updateQuantity(articles);
      deleteItem(articles);
+     totalItems();
 }
 //On utilise cette fonction pour modifier la quantité des produits dans notre panier.
 function updateQuantity(articles) {
     for(let i = 0; i < articles.length ; i++) {
-        articles[i].addEventListener("input", function (el) {
+        articles[i].addEventListener("input", function (e) {
 			/*console.log(el.target.value); On verifie le nombre de valeur qu'on obtiens, avec le console log.
             console.log(articles[i].dataset.id);*/
             let productId = articles[i].dataset.id;
-            let itemQuantity = el.target.value;
-            let resultat = itemCommand.find((el) => el.id == productId);
-            //console.log(resultat);
+            let prouductColor = articles[i].dataset.color;
+            let itemQuantity = e.target.value;
+            let resultat = itemCommand.find((el) => el.id == productId && el.color == prouductColor);
             if (resultat) {
 			    resultat.quantity = itemQuantity;
 			    localStorage.setItem("commande", JSON.stringify(itemCommand));
@@ -63,13 +64,40 @@ function updateQuantity(articles) {
 }
 
 //On utilise cette fonction pour supprimer un ou des articles dans notre panier.
-function deleteItem(articles) {
-    for (let i = 0; i > articles.length; i--) {
-        let deleteBtn = document.querySelector(".deleteItem");
-        deleteBtn.addEventListener("click", function() {
-            
-            
+function deleteItem(articles) { 
+    for (let i = 0; i < articles.length; i++) {
+        let deleteBtn = document.querySelectorAll(".deleteItem");
+        deleteBtn[i].addEventListener("click", function(e) {
+            let idDelete = articles[i].dataset.id;
+            let prouductColor = articles[i].dataset.color;
+            let itemCommandRestant = itemCommand.filter(el => el.id != idDelete || el.color != prouductColor);
+            let confirmation = confirm("Press a button!");
+            if (confirmation == true ) {
+                localStorage.setItem("commande", JSON.stringify(itemCommandRestant));
+                alert("Article(s) supprimé(s)");
+                location.reload();
+            } 
         });
-    
     }
+}
+
+function totalItems () {
+    let quantites = document.querySelectorAll(".itemQuantity");
+    let totalQuantity = 0;
+    let totalPrice = 0;
+
+    for (let i = 0; i < quantites.length ; i++) {
+        totalQuantity += parseInt(quantites[i].value);
+        
+    }
+    document.getElementById("totalQuantity").innerText = totalQuantity;
+
+    for (let i = 0; i < quantites.length ; i++) {
+        totalPrice += itemCommand[i].price * quantites[i].value;
+        console.log(quantites[i].value);
+        console.log(itemCommand[i].price);
+    }
+    console.log("total = " + totalPrice); 
+    document.getElementById("totalQuantity").innerText = totalQuantity;
+
 }
