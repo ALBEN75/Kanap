@@ -81,6 +81,7 @@ function deleteItem(articles) {
     }
 }
 
+// On utilise cette fonction qui permet de calculer le nombre total d'articles et le prix total des articles de notre panier.
 function totalItems () {
     let quantites = document.querySelectorAll(".itemQuantity");
     let totalQuantity = 0;
@@ -98,6 +99,6 @@ function totalItems () {
         console.log(itemCommand[i].price);
     }
     console.log("total = " + totalPrice); 
-    document.getElementById("totalQuantity").innerText = totalQuantity;
+    document.getElementById("totalPrice").innerText = totalPrice;
 
 }
