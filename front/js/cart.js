@@ -34,10 +34,10 @@ function loadItems() {
     
     addListeners();
 }
-// On charge les items de la commande.
+//On charge les items de la commande.
 loadItems();
 
-// On attend le chargement des items avant l'ajouts des listeners.
+//On attend le chargement des items avant l'ajouts des listeners.
 async function addListeners() {
     await loadItems;
      let articles = document.querySelectorAll(".cart__item");
@@ -81,7 +81,7 @@ function deleteItem(articles) {
     }
 }
 
-// On utilise cette fonction qui permet de calculer le nombre total d'articles et le prix total des articles de notre panier.
+//On utilise cette fonction qui permet de calculer le nombre total d'articles et le prix total des articles de notre panier.
 function totalItems () {
     let quantites = document.querySelectorAll(".itemQuantity");
     let totalQuantity = 0;
@@ -95,10 +95,96 @@ function totalItems () {
 
     for (let i = 0; i < quantites.length ; i++) {
         totalPrice += itemCommand[i].price * quantites[i].value;
-        console.log(quantites[i].value);
-        console.log(itemCommand[i].price);
+        //console.log(quantites[i].value);
+        //console.log(itemCommand[i].price);
     }
-    console.log("total = " + totalPrice); 
+    //console.log("total = " + totalPrice); 
     document.getElementById("totalPrice").innerText = totalPrice;
 
 }
+
+//On stocke dans une variable notre id"order" qui est le bouton de commande aprés le formulaire.
+let btnCommand = document.getElementById("order");
+
+//On écoute quand on click sur le bouton "Commander!". 
+btnCommand.addEventListener("click", function(event){
+    event.preventDefault();//On dit au navigateur de ne pas réactualiser notre page quand on click sur le bouton.
+
+    let nameRegex = /^[a-zA-ZÀ-ÿ\'\-]+$/;//On stocke dans notre variable une RegExp pour nos noms et prenoms, qui nous permettra d'utiliser certains caractères.
+    let localityRegex = /^[À-ÿA-Za-z0-9\s\'\-]{5,55}$/;//On stocke dans notre variable une RegExp pour l'adresse et la ville, qui nous permettra d'utiliser certains caractères.
+    let emailRegex = /^([À-ÿA-Za-z0-9_\-\.])+\@([À-ÿA-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;// On stocke dans notre variable une RegExp pour l'email, qui nous permettra d'utiliser certains caractères.
+
+    let firstName = document.getElementById("firstName").value;//On stocke dans une variable notre id"firstName" ainsi que sa valeur, qui correspond a l'input du prénom(le champ pour le prénom) dans le formulaire.
+    let validfirstUsername = firstName.match(nameRegex);//On stocke dans une variable et on appelle notre variable contenant l'id ainsi que sa valeur pour lui appliquer avec l'attribut .match notre RegExp qu'on a créer pour le prénom(donc les règles a respecter).
+    //On utilise une condition pour indiquer que si notre RegExp a une valeur non-défini(valeur null) dans le champ du prénom, il lui retourne une alert avec un message lui expliquant les consignes.
+    if(validfirstUsername == null){
+        alert("Votre prénom n'est pas valide. Seulement les caractères A-Z, a-z, '-', accents et apostrophes sont acceptables.");
+        return false;
+    }
+    
+    let lastName = document.getElementById("lastName").value;
+    let validlastUsername = lastName.match(nameRegex);
+    if(validlastUsername == null){
+        alert("Votre nom n'est pas valide. Seulement les caractères A-Z, a-z, '-', accents et apostrophes sont acceptables.");
+        return false;
+    }
+    
+    let addressLocation = document.getElementById("address").value;
+    let validaddressUserlocation = addressLocation.match(localityRegex);
+    if(validaddressUserlocation == null){
+        alert("Votre adresse n'est pas valide. Seulement les caractères A-Z, a-z, '-', accents et apostrophes sont acceptables.");
+        return false;
+    }
+
+    let cityLocation = document.getElementById("city").value;
+    let validcityUserlocation = cityLocation.match(localityRegex);
+    if(validcityUserlocation == null){
+        alert("Votre ville n'est pas valide. Seulement les caractères A-Z, a-z, '-', accents et apostrophes sont acceptables.");
+        return false;
+    }
+
+    let emailContact = document.getElementById("email").value;
+    let validemailUsercontact = emailContact.match(emailRegex);
+    if(validemailUsercontact == null){
+        alert("Votre email n'est pas valide. Verifiez si votre mail comporte '@' et seuls les caractères A-Z, a-z, 0-9, '-', '_' et '.' sont acceptables.");
+        return false;
+    }
+    
+    let productsId = [];
+    for (item of itemCommand) {
+        productsId.push(item.id);
+    }
+
+    const order = {
+        contact : {
+            firstName : firstName,
+            lastName : lastName,
+            address : addressLocation,
+            city : cityLocation,
+            email : emailContact, 
+        },
+        products : productsId
+    };
+
+    //console.log(order);
+
+    fetch('http://127.0.0.1:3000/api/products/order/', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(order)
+      }).then(res => res.json())
+        .then((res) => { 
+            document.location.href = `confirmation.html?id=${res.orderId}`;
+        } )
+        .catch(function() {
+            alert("Oups, il y a une erreur !");
+        });
+              
+    })
+
+
+
+
