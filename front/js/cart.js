@@ -1,7 +1,8 @@
                                         //DOM//
 
-//On utilise cette variable pour récupérer les données des produits avec notre lockageStorage.                                        
+//On utilise cette variable pour récupérer les données des produits qui sont dans notre lockageStorage.                                        
 let itemCommand = JSON.parse(localStorage.getItem("commande"));
+//console.log(itemCommand);
 
 //On récupere notre ID de notre balise HTML en utilisant cette variable, pour l'utiliser dans notre fonction.
 let cartItem = document.querySelector("#cart__items");
@@ -30,8 +31,7 @@ function loadItems() {
           </div>
         </div>
       </article>`;
-    }
-    
+    } 
     addListeners();
 }
 //On charge les items de la commande.
@@ -45,13 +45,14 @@ async function addListeners() {
      deleteItem(articles);
      totalItems();
 }
+
 //On utilise cette fonction pour modifier la quantité des produits dans notre panier.
 function updateQuantity(articles) {
     for(let i = 0; i < articles.length ; i++) {
         articles[i].addEventListener("input", function (e) {
-			/*console.log(el.target.value); On verifie le nombre de valeur qu'on obtiens, avec le console log.
-            console.log(articles[i].dataset.id);*/
+			//console.log(e.target.value); On verifie le nombre de valeur qu'on obtiens, avec le console log.
             let productId = articles[i].dataset.id;
+            //console.log(articles[i].dataset.id);
             let prouductColor = articles[i].dataset.color;
             let itemQuantity = e.target.value;
             let resultat = itemCommand.find((el) => el.id == productId && el.color == prouductColor);
@@ -68,15 +69,18 @@ function deleteItem(articles) {
     for (let i = 0; i < articles.length; i++) {
         let deleteBtn = document.querySelectorAll(".deleteItem");
         deleteBtn[i].addEventListener("click", function(e) {
+            //console.log(itemCommand);
             let idDelete = articles[i].dataset.id;
             let prouductColor = articles[i].dataset.color;
             let itemCommandRestant = itemCommand.filter(el => el.id != idDelete || el.color != prouductColor);
-            let confirmation = confirm("Press a button!");
+            let confirmation = confirm("Press a button!"); // On crée cette variable avec un attribut confirm pour indiquer a l'utilisateur si il veux vraiment supprimer cette article.
+            // On crée cette condition pour sauvagarder notre nouvelle commande dans le localStorage, on utilise aussi un message d'alert pour indiquer a l'utilisateur que son article a bien etait supprimer.
             if (confirmation == true ) {
                 localStorage.setItem("commande", JSON.stringify(itemCommandRestant));
                 alert("Article(s) supprimé(s)");
-                location.reload();
-            } 
+                location.reload(); // On demande au navigateur de raffraichir ou réactualiser la page web.
+            }
+            //console.log(itemCommandRestant); 
         });
     }
 }
@@ -98,17 +102,19 @@ function totalItems () {
         //console.log(quantites[i].value);
         //console.log(itemCommand[i].price);
     }
-    //console.log("total = " + totalPrice); 
-    document.getElementById("totalPrice").innerText = totalPrice;
+        //console.log("total prix = " + totalPrice + "€"); 
+        //console.log("total quantités = " + totalQuantity + "articles");
 
+    document.getElementById("totalPrice").innerText = totalPrice;
 }
 
 //On stocke dans une variable notre id"order" qui est le bouton de commande aprés le formulaire.
 let btnCommand = document.getElementById("order");
+//console.log(btnCommand);
 
 //On écoute quand on click sur le bouton "Commander!". 
 btnCommand.addEventListener("click", function(event){
-    event.preventDefault();//On dit au navigateur de ne pas réactualiser notre page quand on click sur le bouton.
+    event.preventDefault();//On dit au navigateur de stopper l'action par défault ou de ne pas réactualiser notre page quand on click sur le bouton.
 
     let nameRegex = /^[a-zA-ZÀ-ÿ\'\-]+$/;//On stocke dans notre variable une RegExp pour nos noms et prenoms, qui nous permettra d'utiliser certains caractères.
     let localityRegex = /^[À-ÿA-Za-z0-9\s\'\-]{5,55}$/;//On stocke dans notre variable une RegExp pour l'adresse et la ville, qui nous permettra d'utiliser certains caractères.
@@ -154,6 +160,7 @@ btnCommand.addEventListener("click", function(event){
     for (item of itemCommand) {
         productsId.push(item.id);
     }
+    //console.log(productsId);
 
     const order = {
         contact : {
@@ -175,15 +182,16 @@ btnCommand.addEventListener("click", function(event){
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(order)
-      }).then(res => res.json())
-        .then((res) => { 
-            document.location.href = `confirmation.html?id=${res.orderId}`;
-        } )
-        .catch(function() {
-            alert("Oups, il y a une erreur !");
-        });
-              
     })
+    .then(res => res.json())
+    .then((res) => { 
+        document.location.href = `confirmation.html?id=${res.orderId}`;
+    })
+    .catch(function() {
+        alert("Oups, il y a une erreur !");
+    });
+              
+})
 
 
 
