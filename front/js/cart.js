@@ -185,12 +185,11 @@ btnCommand.addEventListener("click", function(event){
     })
     .then(res => res.json())
     .then((res) => { 
-        document.location.href = `confirmation.html?id=${res.orderId}`;
+        document.location.href = `confirmation.html?id=${res.orderId}`;   
     })
     .catch(function() {
         alert("Oups, il y a une erreur !");
-    });
-              
+    });     
 })
 
 
