@@ -53,9 +53,9 @@ function updateQuantity(articles) {
 			//console.log(e.target.value); On verifie le nombre de valeur qu'on obtiens, avec le console log.
             let productId = articles[i].dataset.id;
             //console.log(articles[i].dataset.id);
-            let prouductColor = articles[i].dataset.color;
+            let productColor = articles[i].dataset.color;
             let itemQuantity = e.target.value;
-            let resultat = itemCommand.find((el) => el.id == productId && el.color == prouductColor);
+            let resultat = itemCommand.find((el) => el.id == productId && el.color == productColor);
             if (resultat) {
 			    resultat.quantity = itemQuantity;
 			    localStorage.setItem("commande", JSON.stringify(itemCommand));
@@ -71,8 +71,8 @@ function deleteItem(articles) {
         deleteBtn[i].addEventListener("click", function(e) {
             //console.log(itemCommand);
             let idDelete = articles[i].dataset.id;
-            let prouductColor = articles[i].dataset.color;
-            let itemCommandRestant = itemCommand.filter(el => el.id != idDelete || el.color != prouductColor);
+            let productColor = articles[i].dataset.color;
+            let itemCommandRestant = itemCommand.filter(el => el.id != idDelete || el.color != productColor);
             let confirmation = confirm("Press a button!"); // On crée cette variable avec un attribut confirm pour indiquer a l'utilisateur si il veux vraiment supprimer cette article.
             // On crée cette condition pour sauvagarder notre nouvelle commande dans le localStorage, on utilise aussi un message d'alert pour indiquer a l'utilisateur que son article a bien etait supprimer.
             if (confirmation == true ) {
